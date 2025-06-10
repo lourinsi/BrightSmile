@@ -1,0 +1,329 @@
+/* Base Reset and Typography */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f7f9fc;
+  color: #333;
+}
+
+/* Layout */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.dashboard-content {
+  display: flex;
+  flex: 1;
+}
+
+/* Navigation */
+.topbar {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eee;
+}
+
+/* Logo flush to left */
+.logo-wrapper {
+  
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Keep your existing .navigation styles */
+.navigation {
+  display: flex;
+  align-items: center;
+  padding-right: 2rem;
+  flex-grow: 1;
+}
+
+
+.navigation .logo {
+  margin-right: 2rem; /* Adjust spacing between logo and nav links */
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-grow: 1;
+  justify-content: flex-start; /* Ensure nav links align left */
+}
+
+
+.nav-links a {
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nav-links a.active {
+  color: #1a73e8;
+  font-weight: bold;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem 2rem 1rem 1rem;
+  white-space: nowrap;
+}
+
+
+.profile-icon img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background-color: #fff;
+  border-right: 1px solid #eee;
+  padding: 1.2rem;
+  overflow-y: auto;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+}
+
+/* Welcome Section */
+.welcome-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.action-buttons button {
+  margin-left: 1rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.primary-btn {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.secondary-btn {
+  background-color: #e6f0ff;
+  color: #1a73e8;
+}
+
+/* Appointment-Calendar */
+.appointment-calendar{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Metric Cards */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Patient List */
+.patient-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-patient-btn {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.search-container {
+  margin: 1rem 0;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.patients-list .patient-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.patient-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.patient-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.status-tag {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.status-tag.scheduled {
+  background-color: #e3f2fd;
+  color: #1a73e8;
+}
+
+.status-tag.to {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-tag.overdue {
+  background-color: #fdecea;
+  color: #d93025;
+}
+
+/* Appointments */
+.appointments-section {
+  margin-bottom: 2rem;
+}
+
+.appointment-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.appointment-status .status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.status.confirmed {
+  background-color: #d7fbe8;
+  color: #137333;
+}
+
+.status.in-progress {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status.completed {
+  background-color: #e0f7fa;
+  color: #00796b;
+}
+
+/* Calendar */
+.calendar-widget {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.05);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-days, .calendar-cells {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day-name, .calendar-cell {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+/* Activity Section */
+.activity-section {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  box-shadow: 0 0 4px rgba(0,0,0,0.05);
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-details h4 {
+  font-size: 0.95rem;
+}
+
+.activity-time span {
+  font-size: 0.8rem;
+  color: #666;
+}
