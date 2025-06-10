@@ -8,6 +8,7 @@ import Calendar from "../components/Calendar";
 import ActivityList from "../components/ActivityList";
 
 import { patients, appointments, activities } from "../data/MockData";
+import Logo from "../components/Logo";
 
 const Dashboard: React.FC = () => {
   const handleAddPatient = (): void => {
@@ -20,7 +21,14 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <Navigation />
+      <div className="topbar flex items-center">
+        <div className="logo-wrapper">
+          <Logo />
+        </div>
+        <div className="navigation">
+          <Navigation />
+        </div>
+      </div>
       <div className="dashboard-content flex">
         {/* Sidebar */}
         <div className="sidebar">
@@ -68,11 +76,7 @@ const Dashboard: React.FC = () => {
               icon={<span>⭐</span>}
             />
           </div>
-          {/* Appointments + Calendar */}
-          <div className="flex gap-4 mb-4 h-[400px]">
-            {/* Today's Appointments + Calendar side by side */}
-          </div>{" "}
-          <div className="flex-1 flex gap-4">
+          <div className="appointment-calendar grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {/* Appointments */}
             <div className="flex-1 bg-white p-4 rounded-xl shadow h-full overflow-auto">
               <AppointmentList appointments={appointments} />

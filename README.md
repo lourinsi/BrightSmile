@@ -52,3 +52,8 @@ export default tseslint.config({
   },
 })
 ```
+<<<<<<< HEAD
+=======
+# BrightSmile
+Bright Smile Dental Clinic
+>>>>>>> backup-before-force

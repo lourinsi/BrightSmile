@@ -6,9 +6,6 @@ const Navigation: React.FC = () => {
   
   return (
     <nav className="navigation">
-      <div className="logo">
-        <h1>BrightSmile😊</h1>
-      </div>
       <div className="nav-links">
         <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
           <span className="icon">👤</span>

@@ -24,23 +24,44 @@ body {
 }
 
 /* Navigation */
-.navigation {
+.topbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
   border-bottom: 1px solid #eee;
-  padding: 0.75rem 2rem;
 }
 
-.navigation .logo h1 {
-  font-size: 1.6rem;
+/* Logo flush to left */
+.logo-wrapper {
+  
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Keep your existing .navigation styles */
+.navigation {
+  display: flex;
+  align-items: center;
+  padding-right: 2rem;
+  flex-grow: 1;
+}
+
+
+.navigation .logo {
+  margin-right: 2rem; /* Adjust spacing between logo and nav links */
 }
 
 .nav-links {
   display: flex;
   gap: 1.5rem;
+  flex-grow: 1;
+  justify-content: flex-start; /* Ensure nav links align left */
 }
+
 
 .nav-links a {
   text-decoration: none;
@@ -55,6 +76,16 @@ body {
   color: #1a73e8;
   font-weight: bold;
 }
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem 2rem 1rem 1rem;
+  white-space: nowrap;
+}
+
 
 .profile-icon img {
   width: 36px;
@@ -103,6 +134,14 @@ body {
 .secondary-btn {
   background-color: #e6f0ff;
   color: #1a73e8;
+}
+
+/* Appointment-Calendar */
+.appointment-calendar{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 /* Metric Cards */
