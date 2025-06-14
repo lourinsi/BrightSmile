@@ -1,4 +1,5 @@
 // src/components/DentalRecordsTable.tsx
+// (No changes needed in this file from the previous version, as the adjustments are purely CSS.)
 import React, { useState } from "react";
 import type { DentalRecord } from "../types";
 import { format } from "date-fns";
@@ -23,7 +24,6 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
     return matchesDate && matchesStatus;
   });
 
-  // Pagination logic
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = filteredRecords.slice(
@@ -65,7 +65,7 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 w-full dental-records-table">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -95,25 +95,25 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
             {currentRecords.length > 0 ? (
               currentRecords.map((record) => (
                 <tr key={record.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 text-sm text-gray-900 text-left">
                     {format(record.date, "MMM dd, yyyy")}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 text-sm text-gray-900 text-left">
                     {record.procedure}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 text-sm text-gray-900 text-left">
                     {record.totalCost.toLocaleString("en-PH", {
                       style: "currency",
                       currency: "PHP",
                     })}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 text-sm text-gray-900 text-left">
                     {record.paymentLeft.toLocaleString("en-PH", {
                       style: "currency",
                       currency: "PHP",
                     })}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-6 py-4 text-sm text-left">
                     <span
                       className={`status ${record.status
                         .toLowerCase()
@@ -122,7 +122,7 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
                       {record.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <td className="px-6 py-4 text-sm font-medium text-left">
                     <button className="text-blue-600 hover:text-blue-900 mr-2">
                       Edit
                     </button>
@@ -130,7 +130,7 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
                       View
                     </button>
                   </td>
-                  <td className="px-6 py-4 whitespace-normal text-sm text-gray-500">
+                  <td className="px-6 py-4 text-sm text-gray-500 text-left">
                     {record.notes}
                   </td>
                 </tr>
@@ -146,7 +146,7 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
         </table>
       </div>
 
-      {/* Pagination */}
+      {/* Pagination controls */}
       {filteredRecords.length > recordsPerPage && (
         <div className="flex justify-end items-center mt-4">
           <span className="text-sm text-gray-700 mr-2">

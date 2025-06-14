@@ -1,4 +1,11 @@
-/* Base Reset and Typography */
+/* src/index.css */
+
+/* Tailwind CSS Directives - THESE MUST BE AT THE VERY TOP */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Base Reset and Typography --- */
 * {
   margin: 0;
   padding: 0;
@@ -6,59 +13,58 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif; /* Ensure 'Inter' font is available or replace with a fallback */
   background-color: #f7f9fc;
   color: #333;
 }
 
-/* Layout */
+/* --- Global Layout Styles --- */
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* Ensures the container takes full viewport height */
 }
 
 .dashboard-content {
   display: flex;
-  flex: 1;
+  flex: 1; /* Allows content to take remaining space */
 }
 
-/* --- Navigation & Topbar Styles --- */
+/* --- Topbar & Navigation Styles --- */
 .topbar {
   display: flex;
   align-items: center;
   background-color: #ffffff;
   border-bottom: 1px solid #eee;
-  padding: 0.5rem 0; /* Adjust padding for topbar */
+  padding: 0.5rem 0; /* Adjust padding for topbar height */
 }
 
-.logo-wrapper {
-  /* No specific styles needed here, logo itself has padding */
-}
+/* Specific styling for the Logo component wrapper in the topbar */
+/* The actual Logo component now uses Tailwind classes directly for its internal layout */
+/* .logo-wrapper { ... no specific styles needed if .logo itself has all flex/padding } */
 
+/* Generic .logo class (if used as a container for BrightSmile text/image) */
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  white-space: nowrap;
-  padding: 1rem 2rem 1rem 1rem; /* Adjust padding for logo */
+  /* This class is now primarily styled with Tailwind in Logo.tsx.
+     Ensure consistency if you have other uses of .logo. */
+  font-size: 1.5rem; /* Fallback/general font-size */
+  font-weight: bold; /* Fallback/general font-weight */
+  white-space: nowrap; /* Prevent text wrap */
+  padding: 1rem 2rem 1rem 1rem; /* General padding */
 }
 
 .navigation {
   display: flex;
   align-items: center;
   padding-right: 2rem;
-  flex-grow: 1;
-}
-
-.navigation .logo {
-  margin-right: 2rem; /* Adjust spacing between logo and nav links */
+  flex-grow: 1; /* Allows navigation to take available horizontal space */
 }
 
 .nav-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.5rem; /* Space between navigation links */
   flex-grow: 1;
-  justify-content: flex-start; /* Ensure nav links align left */
+  justify-content: flex-start; /* Align nav links to the left */
 }
 
 .nav-links a {
@@ -68,7 +74,8 @@ body {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.5rem 0; /* Add padding for clickable area */
+  padding: 0.5rem 0; /* Padding for clickable area */
+  transition: color 0.2s ease-in-out; /* Smooth transition for hover/active */
 }
 
 .nav-links a.active {
@@ -81,23 +88,24 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  object-fit: cover; /* Ensures image fills without distortion */
 }
 
-/* --- Sidebar Styles --- */
+/* --- Sidebar Styles (Patient List Container) --- */
 .sidebar {
-  width: 280px;
+  width: 280px; /* Fixed width for the sidebar */
   background-color: #fff;
   border-right: 1px solid #eee;
   padding: 1.2rem;
-  overflow-y: auto;
-  flex-shrink: 0; /* Prevent sidebar from shrinking */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  flex-shrink: 0; /* Prevent sidebar from shrinking when main content needs more space */
 }
 
 /* --- Main Content Area Styles --- */
 .main-content {
-  flex: 1;
+  flex: 1; /* Allows main content to take remaining space */
   padding: 1.5rem 2rem;
-  overflow-y: auto;
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
 }
 
 /* --- Dashboard Specific Sections (from previous context) --- */
@@ -120,12 +128,24 @@ body {
 .primary-btn {
   background-color: #1a73e8;
   color: white;
+  transition: background-color 0.2s ease-in-out; /* Smooth transition */
+}
+
+.primary-btn:hover {
+  background-color: #1660cc;
 }
 
 .secondary-btn {
   background-color: #e6f0ff;
   color: #1a73e8;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
+
+.secondary-btn:hover {
+  background-color: #d1e2ff;
+  color: #135ac5;
+}
+
 
 .appointment-calendar{
   display: grid;
@@ -161,16 +181,17 @@ body {
 
 /* --- Patient List Styles --- */
 .patient-list-container {
-  /* Existing styles are fine */
+  /* No additional styling needed here, inherited from general component styling */
 }
 
 .patient-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem; /* Added margin-bottom */
+  margin-bottom: 1rem;
 }
 
+/* Specific style for add patient button within patient list */
 .add-patient-btn {
   background-color: #1a73e8;
   color: white;
@@ -178,13 +199,18 @@ body {
   border-radius: 6px;
   padding: 0.4rem 0.8rem;
   cursor: pointer;
-  display: flex; /* Added flex for alignment */
-  align-items: center; /* Added alignment */
-  gap: 0.25rem; /* Space between plus and text */
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-patient-btn:hover {
+  background-color: #1660cc;
 }
 
 .search-container {
-  margin-bottom: 1rem; /* Adjusted margin */
+  margin-bottom: 1rem;
 }
 
 .search-container input {
@@ -197,12 +223,12 @@ body {
 .patients-list .patient-item {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Align items vertically */
-  margin-bottom: 0.5rem; /* Reduced margin */
-  padding: 0.75rem 0.5rem; /* Adjusted padding */
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 0.5rem;
   border-bottom: 1px solid #f0f0f0;
-  border-radius: 8px; /* Added border radius */
-  transition: background-color 0.2s ease-in-out, border-left 0.2s ease-in-out; /* Smooth transition */
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out, border-left 0.2s ease-in-out;
 }
 
 .patients-list .patient-item:last-child {
@@ -219,38 +245,58 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  object-fit: cover; /* Ensure image covers the area */
+  object-fit: cover;
 }
 
 .patient-info h4 {
-  font-size: 0.95rem; /* Adjusted font size */
+  font-size: 0.95rem;
 }
 
 .patient-info p {
-  font-size: 0.8rem; /* Adjusted font size */
+  font-size: 0.8rem;
 }
 
-.status-tag {
+/* --- Status Tag Styles (Global for .status-tag and .status) --- */
+/* These styles are shared between Patient List and Appointment List status indicators */
+.status-tag, .status {
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   font-size: 0.75rem;
-  font-weight: 500; /* Added font weight */
+  font-weight: 500;
+  white-space: nowrap; /* Prevents text from wrapping within the tag */
+  display: inline-block; /* Ensures padding and background work correctly */
 }
 
-.status-tag.scheduled {
+.status-tag.scheduled, .status.scheduled {
   background-color: #e3f2fd;
   color: #1a73e8;
 }
 
-.status-tag.to-pay { /* Changed to to-pay from to */
+.status-tag.to-pay { /* Specific to Patient List status */
   background-color: #fff3cd;
   color: #856404;
 }
 
-.status-tag.overdue {
+.status-tag.overdue, .status.overdue {
   background-color: #fdecea;
   color: #d93025;
 }
+
+.status.confirmed { /* Specific to Appointment List status */
+  background-color: #d7fbe8;
+  color: #137333;
+}
+
+.status.in-progress { /* Specific to Appointment List and Dental Records status */
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status.completed { /* Specific to Appointment List and Dental Records status */
+  background-color: #e0f7fa;
+  color: #00796b;
+}
+
 
 /* --- Appointments List Styles --- */
 .appointments-section {
@@ -259,9 +305,8 @@ body {
 
 .appointment-item {
   display: flex;
-  /* Removed justify-content: space-between; here */
-  align-items: center; /* Vertically align items in the flex container */
-  gap: 1rem; /* Added gap for consistent spacing between items */
+  justify-content: space-between; /* Spreads out items evenly */
+  align-items: center; /* Vertically aligns items in the row */
   background-color: #fff;
   padding: 0.8rem 1rem;
   margin-bottom: 1rem;
@@ -269,48 +314,41 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.appointment-details { /* Styles for the details section */
-  flex-grow: 1; /* Allows it to take available space */
-  /* Removed margin-left as gap on parent handles spacing */
-  text-align: center; /* Horizontally center text within this div */
+.time {
+  font-weight: bold;
+  min-width: 4.5rem; /* Ensures consistent width for time slot */
+  text-align: left;
+}
+
+.appointment-details {
+  flex-grow: 1; /* Allows this section to take up available space */
+  display: flex;
+  flex-direction: column; /* Stacks h4 and p vertically */
+  align-items: flex-start; /* Aligns h4 and p to the left within this column */
+  /* No margin-left here; gap from parent or explicit margin on time/details container will handle it */
 }
 
 .appointment-details h4 {
   font-size: 0.95rem;
-  margin-bottom: 0.1rem; /* Adjusted margin */
-  text-align: center;
+  margin-bottom: 0.1rem; /* Reduced space between name and type */
 }
 
 .appointment-details p {
   font-size: 0.85rem;
   color: #555;
-  margin-top: 0; /* Ensure no top margin */
+  margin-top: 0; /* Removes default top margin for paragraph */
 }
 
-.time { /* Styling for the time element */
-  font-weight: bold;
-  min-width: 4.5rem; /* Ensure consistent width for time */
-  text-align: left; /* Keep time aligned left */
-}
-
-.appointment-duration { /* Styling for duration */
+.appointment-duration {
   font-size: 0.85rem;
   color: #666;
-  min-width: 4.5rem; /* Ensure consistent width */
-  text-align: right; /* Align to the right */
+  min-width: 4.5rem; /* Consistent width for duration */
+  text-align: right;
 }
 
-.appointment-status { /* Styling for status wrapper */
-  /* Removed margin-left as gap on parent handles spacing */
-  min-width: 4rem; /* Give status a consistent minimum width */
-  text-align: right; /* Align status to the right */
-}
-
-.appointment-status .status {
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  white-space: nowrap; /* Prevent wrapping */
+.appointment-status {
+  min-width: 4rem; /* Consistent width for status tag */
+  text-align: right;
 }
 
 /* --- Calendar Styles --- */
@@ -350,8 +388,8 @@ body {
 .activity-item {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* <<< --- ADDED THIS LINE --- >>> */
-  padding: 0.5rem 0;
+  align-items: center;
+  padding: 0.5rem 1rem; /* Increased horizontal padding */
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -360,22 +398,23 @@ body {
 }
 
 .activity-details {
-  flex-grow: 1; /* Allow activity details to take available space */
-  margin-left: 0.75rem; /* Add some space from the icon */
+  flex-grow: 1;
+  margin-left: 1rem; /* Increased space from the icon */
+  /* Removed text-align: center here as per last instruction for Activity List */
 }
 
 .activity-details h4 {
   font-size: 0.95rem;
-  margin-bottom: 0.2rem; /* Reduce default margin for h4 */
+  margin-bottom: 0.2rem;
 }
 
 .activity-details p {
-  font-size: 0.85rem; /* Slightly larger for readability */
+  font-size: 0.85rem;
   color: #555;
 }
 
 .activity-time {
-  text-align: right; /* Align time to the right */
+  text-align: right;
 }
 
 .activity-time span {
@@ -385,13 +424,13 @@ body {
 
 /* --- Patient Detail Page Specific Styles --- */
 .patient-detail-container {
-  padding: 1.5rem; /* Consistent padding */
-  border-radius: 12px; /* Consistent border radius */
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08); /* More prominent shadow */
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
 }
 
 .patient-info-header h2 {
-  font-size: 1.75rem; /* Larger font size for patient name */
+  font-size: 1.75rem;
   color: #222;
 }
 
@@ -422,26 +461,25 @@ body {
 }
 
 .dental-chart-upload .primary-btn, .medical-receipts-upload .primary-btn {
-  width: auto; /* Allow button to size based on content */
-  align-self: center; /* Center the button */
-  padding: 0.75rem 1.5rem; /* Larger padding for upload buttons */
-  font-size: 1rem; /* Larger font size */
+  width: auto;
+  align-self: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
 }
 
-/* --- Dental Records Table Specific Styles (Refined) --- */
+/* --- Dental Records Table Specific Styles --- */
 .dental-records-table-container {
-  /* No additional styling needed here, inherited from general component styling */
+  /* No additional styling needed here */
 }
 
 .dental-records-table {
-  table-layout: fixed; /* Forces columns to respect width explicitly */
-  width: 100%; /* Ensure the table itself takes full available width */
+  table-layout: fixed;
+  width: 100%;
 }
 
-/* Define explicit widths for each column to control distribution for better spacing */
 .dental-records-table th:nth-child(1), /* Date */
 .dental-records-table td:nth-child(1) {
-  width: 12%; /* Giving a bit more room */
+  width: 12%;
 }
 
 .dental-records-table th:nth-child(2), /* Procedure */
@@ -466,44 +504,26 @@ body {
 
 .dental-records-table th:nth-child(6), /* Actions */
 .dental-records-table td:nth-child(6) {
-  width: 14%; /* Enough space for buttons */
+  width: 14%;
 }
 
 .dental-records-table th:nth-child(7), /* Notes */
 .dental-records-table td:nth-child(7) {
-  width: 20%; /* Will take the remaining space and wrap text */
+  width: 20%;
 }
 
-/* Consistent padding and alignment for all table cells and headers */
 .dental-records-table th,
 .dental-records-table td {
-  padding: 0.9rem 1.2rem; /* Increased horizontal padding for more 'spread' */
-  vertical-align: top; /* Align content to the top */
-  text-align: left; /* Ensure text is left-aligned */
+  padding: 0.9rem 1.2rem;
+  vertical-align: top;
+  text-align: left;
 }
 
-/* Status tag styling within the table to keep it compact and visually distinct */
 .dental-records-table .status {
   padding: 0.3rem 0.7rem;
-  border-radius: 9999px; /* Pill shape */
+  border-radius: 9999px;
   font-size: 0.7rem;
   font-weight: 600;
-  display: inline-block; /* Allows padding and background to render correctly */
-  white-space: nowrap; /* Prevents status text from wrapping */
-}
-
-/* Existing status tag colors (ensure these are in your index.css) */
-.status.in-progress {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.status.completed {
-  background-color: #e0f7fa;
-  color: #00796b;
-}
-
-.status.scheduled {
-  background-color: #e3f2fd;
-  color: #1a73e8;
+  display: inline-block;
+  white-space: nowrap;
 }
