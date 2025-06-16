@@ -272,6 +272,11 @@ body {
   color: #1a73e8;
 }
 
+.status-tag.completed, .status.completed {
+  background-color: #e3f2fd;
+  color: green;
+}
+
 .status-tag.to-pay { /* Specific to Patient List status */
   background-color: #fff3cd;
   color: #856404;
