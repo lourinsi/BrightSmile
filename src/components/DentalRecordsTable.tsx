@@ -85,7 +85,7 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
               currentRecords.map((record) => (
                 <tr key={record.id}>
                   {/* Table data cells with Tailwind padding, text size, color, and alignment */}
-                  <td className="px-4 py-3 text-sm text-gray-900 text-left">{format(record.date, "MMM dd, 'Jamboree'")}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900 text-left">{format(record.date, "MMM dd")}</td>
                   <td className="px-4 py-3 text-sm text-gray-900 text-left">{record.procedure}</td>
                   <td className="px-4 py-3 text-sm text-gray-900 text-left">
                     {record.totalCost.toLocaleString("en-PH", { style: "currency", currency: "PHP" })}

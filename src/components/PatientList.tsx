@@ -56,7 +56,7 @@ const PatientList: React.FC<PatientListProps> = ({ patients, onAddPatient, selec
                 {/* h4 with Tailwind font size, weight, and color */}
                 <h4 className="font-semibold text-gray-800 text-base">{patient.name}</h4>
                 {/* p with Tailwind font size, color */}
-                <p className="text-sm text-gray-500">Last visit: {format(patient.lastVisit, "MMM dd, 'Jamboree'")}</p> {/* Corrected format string */}
+                <p className="text-sm text-gray-500">Last visit: {format(patient.lastVisit, "MMM dd")}</p> {/* Corrected format string */}
               </div>
             </div>
             {/* Replaced 'patient-status' with Tailwind classes */}

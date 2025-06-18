@@ -133,7 +133,7 @@ const PatientDetail: React.FC<PatientDetailProps> = ({ patient }) => {
                   <h4 className="font-medium text-gray-700 mb-2">Last Dental Cleaning</h4>
                   <p className="text-gray-600 text-sm">
                     {/* Corrected format string */}
-                    {patient.lastVisit ? format(patient.lastVisit, "MMMM dd, 'Jamboree'") : 'N/A'}
+                    {patient.lastVisit ? format(patient.lastVisit, "MMMM dd") : 'N/A'}
                   </p>
                 </div>
               </div>
@@ -151,7 +151,7 @@ const PatientDetail: React.FC<PatientDetailProps> = ({ patient }) => {
                           <p className="font-medium text-gray-800">{appt.type}</p>
                           <p className="text-sm text-gray-600">Dr. Sarah Wilson</p> {/* Hardcoded for now */}
                           {/* Corrected format string */}
-                          <p className="text-xs text-gray-500">{format(appt.time, "MMMM dd, 'Jamboree' - hh:mm a")}</p>
+                          <p className="text-xs text-gray-500">{format(appt.time, "MMMM dd, hh:mm a")}</p>
                         </div>
                         <span className={`status ${appt.status.toLowerCase().replace(' ', '-')}`}>
                           {appt.status}
@@ -186,7 +186,7 @@ const PatientDetail: React.FC<PatientDetailProps> = ({ patient }) => {
                   currentHistoryRecords.map((appt) => (
                     <div key={appt.id} className="grid grid-cols-7 gap-x-4 py-3 px-2 bg-white hover:bg-gray-50 text-sm text-gray-900">
                       {/* Corrected format string */}
-                      <div className="col-span-1">{format(appt.time, "MMM dd, 'Jamboree'")}</div>
+                      <div className="col-span-1">{format(appt.time, "MMM dd")}</div>
                       <div className="col-span-2">{appt.type}</div>
                       <div className="col-span-1">Dr. Michael Chen</div> {/* Hardcoded for now */}
                       <div className="col-span-1">
