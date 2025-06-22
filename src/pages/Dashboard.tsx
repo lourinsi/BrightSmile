@@ -14,6 +14,7 @@ const Dashboard: React.FC = () => {
   const handleAddPatient = (): void => {
     console.log("Add patient clicked");
   };
+  
 
   const handleNewAppointment = (): void => {
     console.log("New appointment clicked");

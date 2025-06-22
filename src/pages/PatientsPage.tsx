@@ -53,10 +53,6 @@ const PatientsPage: React.FC = () => {
         <div className="navigation">
           <Navigation />
         </div>
-        {/* Profile icon */}
-        <div className="profile-icon mr-4">
-          <img src="/profile-pic.jpg" alt="Dr. Smith" className="w-9 h-9 rounded-full" />
-        </div>
       </div>
 
       {/* Main content area, structured with a sidebar and a main content section */}
