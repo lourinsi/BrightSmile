@@ -14,6 +14,10 @@ interface PatientDetailProps {
 const PatientDetail: React.FC<PatientDetailProps> = ({ patient }) => {
   const [activeTab, setActiveTab] = useState<"personal" | "dental">("personal"); // Default to personal info
 
+  const handleAddDentalRecord = (): void => {
+    console.log("Add Dental Record clicked");
+  };
+
   // Filter dental records for the current patient
   const patientDentalRecords = dentalRecords.filter(
     (record) => record.patientId === patient.id
@@ -255,7 +259,7 @@ const PatientDetail: React.FC<PatientDetailProps> = ({ patient }) => {
           <div className="dental-records-content">
             {/* Dental Records Table */}
             <div className="mb-8">
-              <DentalRecordsTable records={patientDentalRecords} />
+              <DentalRecordsTable records={patientDentalRecords} onAddDentalRecord={handleAddDentalRecord} />
             </div>
 
             {/* Dental Chart and Medical Receipts */}

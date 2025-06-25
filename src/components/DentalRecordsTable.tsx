@@ -2,16 +2,57 @@
 import React, { useState } from "react";
 import type { DentalRecord } from "../types";
 import { format } from "date-fns";
+import AddDentalRecordOverlay from "./AddDentalRecordOverlay";
+// Import the overlay component
 
 interface DentalRecordsTableProps {
   records: DentalRecord[];
+  onAddDentalRecord: (newDentalRecord?: NewDentalRecordFormData) => void; // Modified to pass newPatientData or be called empty for initial click
+  selectedDentalRecordId?: string; // Optional ID of the currently selected patient, used for highlighting in the UI.
 }
 
-const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
+// Use the exact status types from DentalRecord interface for the status field
+type DentalRecordStatus = DentalRecord['status'];
+
+interface NewDentalRecordFormData {
+  date: string; // Storing as string from input type="date"
+  procedure: string;
+  totalCost: number;
+  paymentLeft: number;
+  status: DentalRecordStatus | ''; // Use specific status types, allow empty for initial state
+  notes: string;
+}
+
+const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records, onAddDentalRecord, selectedDentalRecordId }) => {
   const [filterDate, setFilterDate] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recordsPerPage = 3; // As seen in the image
+
+  // State to control the visibility of the AddPatientOverlay, managed internally
+  const [showAddDentalRecordOverlay, setShowAddDentalRecordOverlay] = useState(false);
+  
+  // Internal handler for the "Add Patient" button click
+  const handleOpenAddDentalRecordOverlay = (): void => {
+    setShowAddDentalRecordOverlay(true);
+    onAddDentalRecord(); // Notify parent that "Add Patient" was clicked (without data yet)
+  };
+
+  // Internal handler to close the Add Patient overlay
+  const handleCloseAddDentalRecordOverlay = (): void => {
+    setShowAddDentalRecordOverlay(false);
+  };
+
+    // Internal handler for saving a new patient from the overlay
+  const handleSaveNewDentalRecord = (newDentalRecord: NewDentalRecordFormData): void => {
+    console.log("New patient data saved (from PatientList):", newDentalRecord);
+    // In a real application, you would send this data to your backend API
+    // and then refresh your patient list. For now, it's just logged.
+    alert('New dental record added! (Check console for data)'); // Using alert for now, replace with custom modal
+    onAddDentalRecord(newDentalRecord); // Notify parent with the new dental record data
+    handleCloseAddDentalRecordOverlay(); // Close overlay after save
+  };
+
 
   const filteredRecords = records.filter((record) => {
     const matchesDate = filterDate
@@ -39,7 +80,7 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold text-gray-800">Dental Records</h3>
         {/* Replaced 'primary-btn' with Tailwind classes */}
-        <button className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-1 hover:bg-blue-700 transition-colors duration-200">
+        <button onClick={handleOpenAddDentalRecordOverlay} className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-1 hover:bg-blue-700 transition-colors duration-200">
           <span className="text-xl">+</span> Add New Record
         </button>
       </div>
@@ -155,6 +196,12 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records }) => {
           </nav>
         </div>
       )}
+      {/* Add Patient Overlay - rendered directly within PatientList */}
+      <AddDentalRecordOverlay
+        isOpen={showAddDentalRecordOverlay}
+        onClose={handleCloseAddDentalRecordOverlay}
+        onSave={handleSaveNewDentalRecord}
+      />
     </div>
   );
 };
