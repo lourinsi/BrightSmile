@@ -13,10 +13,11 @@ interface DentalRecordsTableProps {
 
 // Use the exact status types from DentalRecord interface for the status field
 type DentalRecordStatus = DentalRecord['status'];
+type DentalRecordProcedure = DentalRecord['procedure'];
 
 interface NewDentalRecordFormData {
   date: string; // Storing as string from input type="date"
-  procedure: string;
+  procedure: DentalRecordProcedure | '';
   totalCost: number;
   paymentLeft: number;
   status: DentalRecordStatus | ''; // Use specific status types, allow empty for initial state

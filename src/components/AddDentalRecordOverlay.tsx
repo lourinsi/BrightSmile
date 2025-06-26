@@ -5,11 +5,13 @@ import type { DentalRecord } from '../types';
 
 // Use the exact status types from DentalRecord interface for the status field
 type DentalRecordStatus = DentalRecord['status'];
+// DentalRecordProcedure now allows any string when 'Other' is selected
+type DentalRecordProcedure = DentalRecord['procedure'] | string;
 
 // Define the shape of the new dental record data for the form
 interface NewDentalRecordFormData {
   date: string; // Storing as string from input type="date"
-  procedure: string;
+  procedure: DentalRecordProcedure; // Can be a predefined procedure or a custom string
   totalCost: number;
   paymentLeft: number;
   status: DentalRecordStatus | ''; // Use specific status types, allow empty for initial state
@@ -44,37 +46,59 @@ const AddDentalRecordOverlay: React.FC<AddDentalRecordOverlayProps> = ({
     notes: '',
   });
 
+  // State to track if 'Other' procedure is selected
+  const [isOtherProcedure, setIsOtherProcedure] = useState(false);
+  const [otherProcedureText, setOtherProcedureText] = useState('');
+
+
   // Handle changes for text, number, and select inputs
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value, type } = e.target;
 
-    // Special handling for number inputs
-    if (type === 'number') {
+    if (name === 'procedure') {
+      // If procedure is 'Other', set flag and clear custom text if not 'Other'
+      setIsOtherProcedure(value === 'Other');
+      // If user switches from 'Other' to a predefined procedure, clear otherProcedureText
+      if (value !== 'Other') {
+        setOtherProcedureText('');
+      }
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    } else if (name === 'otherProcedureText') {
+      // If it's the custom 'other' input, update that state and also the main procedure in formData
+      setOtherProcedureText(value);
+      setFormData((prev) => ({ ...prev, procedure: value }));
+    } else if (type === 'number') {
       setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  // handleRadioChange is removed as it's not relevant to dental records
   // handleSave button click
   const handleSave = () => {
+    // Determine the final procedure value
+    const finalProcedure = isOtherProcedure ? otherProcedureText : formData.procedure;
+
     // Basic validation for required fields
     if (
       !formData.date ||
-      !formData.procedure ||
-      formData.totalCost <= 0 || // Ensure cost is positive
-      formData.paymentLeft < 0 || // Payment left can be zero
+      !finalProcedure || // Validate finalProcedure
       !formData.status
     ) {
       alert("Please fill in all required fields correctly (marked with *)");
       return;
     }
 
+    // Create the new dental record object with the final procedure
+    const newDentalRecord = {
+      ...formData,
+      procedure: finalProcedure,
+    };
+
     // Pass the form data to the onSave prop
-    onSave(formData);
+    onSave(newDentalRecord);
 
     // Optionally clear form after saving
     setFormData({
@@ -85,24 +109,25 @@ const AddDentalRecordOverlay: React.FC<AddDentalRecordOverlayProps> = ({
       status: '',
       notes: '',
     });
+    setOtherProcedureText(''); // Clear custom text
+    setIsOtherProcedure(false); // Reset other procedure flag
     onClose(); // Close the modal after saving
   };
 
   // Handle clicks on the overlay background to close the modal
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (
-      modalContentRef.current &&
-      !modalContentRef.current.contains(e.target as Node)
-    ) {
-      onClose(); // Call the onClose prop to close the overlay
-    }
-  };
+  // const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  //   if (
+  //     modalContentRef.current &&
+  //     !modalContentRef.current.contains(e.target as Node)
+  //   ) {
+  //     onClose(); // Call the onClose prop to close the overlay
+  //   }
+  // };
 
   return (
     // Overlay background (darkens the rest of the page)
     <div
       className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4"
-      onClick={handleOverlayClick}
     >
       {/* Modal Content */}
       <div
@@ -145,22 +170,41 @@ const AddDentalRecordOverlay: React.FC<AddDentalRecordOverlayProps> = ({
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
-              <div className="col-span-1 md:col-span-2"> {/* Procedure spans both columns for longer text */}
+              <div className="col-span-1 md:col-span-2">
                 <label
                   htmlFor="procedure"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Procedure <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text" // Corrected type from "string" to "text"
+                <select
                   id="procedure"
                   name="procedure"
-                  value={formData.procedure}
+                  value={formData.procedure === 'Other' ? 'Other' : formData.procedure} // Ensure 'Other' option is selected if custom text exists
                   onChange={handleChange}
-                  placeholder="Enter procedure"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                >
+                  <option value="" disabled>Select procedure</option>
+                  <option value="Dental Cleaning">Dental Cleaning</option>
+                  <option value="Tooth Extraction">Tooth Extraction</option>
+                  <option value="Dental Fillings">Dental Fillings</option>
+                  <option value="Teeth Whitening">Teeth Whitening</option>
+                  <option value="Root Canal Treatment">Root Canal Treatment</option>
+                  <option value="Braces">Braces</option>
+                  <option value="Other">Other</option> {/* Added Other option */}
+                </select>
+                {/* Conditionally rendered input for 'Other' procedure */}
+                {isOtherProcedure && (
+                  <input
+                    type="text"
+                    id="otherProcedureText"
+                    name="otherProcedureText"
+                    value={otherProcedureText}
+                    onChange={handleChange}
+                    placeholder="Specify procedure"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 mt-2"
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -174,7 +218,7 @@ const AddDentalRecordOverlay: React.FC<AddDentalRecordOverlayProps> = ({
                   htmlFor="totalCost"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Total Cost <span className="text-red-500">*</span>
+                  Total Cost
                 </label>
                 <input
                   type="number"
@@ -191,7 +235,7 @@ const AddDentalRecordOverlay: React.FC<AddDentalRecordOverlayProps> = ({
                   htmlFor="paymentLeft"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Payment Left <span className="text-red-500">*</span>
+                  Payment Left
                 </label>
                 <input
                   type="number"
@@ -203,7 +247,7 @@ const AddDentalRecordOverlay: React.FC<AddDentalRecordOverlayProps> = ({
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
-              <div className="col-span-1 md:col-span-2"> {/* Status spans both columns or adjust as needed */}
+              <div className="col-span-1 md:col-span-2">
                 <label
                   htmlFor="status"
                   className="block text-sm font-medium text-gray-700 mb-1"
@@ -229,7 +273,7 @@ const AddDentalRecordOverlay: React.FC<AddDentalRecordOverlayProps> = ({
           {/* Notes */}
           <div>
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Notes</h3>
-            <div className="grid grid-cols-1 gap-4"> {/* Single column for notes */}
+            <div className="grid grid-cols-1 gap-4">
               <div>
                 <label
                   htmlFor="notes"
@@ -237,13 +281,13 @@ const AddDentalRecordOverlay: React.FC<AddDentalRecordOverlayProps> = ({
                 >
                   Notes
                 </label>
-                <textarea // Changed to textarea for multiline notes
+                <textarea
                   id="notes"
                   name="notes"
                   value={formData.notes}
-                  onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                  onChange={handleChange}
                   placeholder="Enter notes"
-                  rows={3} // Adjust rows as needed
+                  rows={3}
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 ></textarea>
               </div>
