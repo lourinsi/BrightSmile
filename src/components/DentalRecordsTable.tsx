@@ -1,63 +1,89 @@
 // src/components/DentalRecordsTable.tsx
 import React, { useState } from "react";
-import type { DentalRecord } from "../types";
+import type { DentalRecord } from "../types"; // Correctly import DentalRecord
 import { format } from "date-fns";
-import AddDentalRecordOverlay from "./AddDentalRecordOverlay";
-// Import the overlay component
+import AddDentalRecordOverlay from "./AddDentalRecordOverlay"; // Ensure this is imported
 
-interface DentalRecordsTableProps {
-  records: DentalRecord[];
-  onAddDentalRecord: (newDentalRecord?: NewDentalRecordFormData) => void; // Modified to pass newPatientData or be called empty for initial click
-  selectedDentalRecordId?: string; // Optional ID of the currently selected patient, used for highlighting in the UI.
-}
-
-// Use the exact status types from DentalRecord interface for the status field
-type DentalRecordStatus = DentalRecord['status'];
-type DentalRecordProcedure = DentalRecord['procedure'];
-
+// New type for data coming from the overlay (user input)
+// This interface defines the shape of data *as it comes from the form*.
 interface NewDentalRecordFormData {
   date: string; // Storing as string from input type="date"
-  procedure: DentalRecordProcedure | '';
+  procedure: string; // Can be predefined or 'Other' text
   totalCost: number;
   paymentLeft: number;
-  status: DentalRecordStatus | ''; // Use specific status types, allow empty for initial state
+  status: DentalRecord['status'] | '';
   notes: string;
 }
 
-const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records, onAddDentalRecord, selectedDentalRecordId }) => {
+interface DentalRecordsTableProps {
+  records: DentalRecord[];
+  // CORRECTED: onAddDentalRecord now expects a full DentalRecord object,
+  // as that's what handleSaveNewDentalRecord constructs before passing it up.
+  onAddDentalRecord: (newDentalRecord: DentalRecord) => void;
+  // onSelectDentalRecord?: (record: DentalRecord) => void; // If you later want selection within the table
+  // selectedDentalRecordId?: string; // If you later want highlighting within the table
+}
+
+
+const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records, onAddDentalRecord }) => {
+  // Log all dental records received by this component
+  console.log("Dental Records for current patient:", records);
+
   const [filterDate, setFilterDate] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recordsPerPage = 3; // As seen in the image
 
-  // State to control the visibility of the AddPatientOverlay, managed internally
+  // State to control the visibility of the AddDentalRecordOverlay
   const [showAddDentalRecordOverlay, setShowAddDentalRecordOverlay] = useState(false);
-  
-  // Internal handler for the "Add Patient" button click
+
+  // Internal handler for the "Add New Record" button click
   const handleOpenAddDentalRecordOverlay = (): void => {
     setShowAddDentalRecordOverlay(true);
-    onAddDentalRecord(); // Notify parent that "Add Patient" was clicked (without data yet)
+    // You could also call onAddDentalRecord here without data if the parent
+    // needs to know the overlay was opened.
   };
 
-  // Internal handler to close the Add Patient overlay
+  // Internal handler to close the Add Dental Record overlay
   const handleCloseAddDentalRecordOverlay = (): void => {
     setShowAddDentalRecordOverlay(false);
   };
 
-    // Internal handler for saving a new patient from the overlay
-  const handleSaveNewDentalRecord = (newDentalRecord: NewDentalRecordFormData): void => {
-    console.log("New patient data saved (from PatientList):", newDentalRecord);
-    // In a real application, you would send this data to your backend API
-    // and then refresh your patient list. For now, it's just logged.
-    alert('New dental record added! (Check console for data)'); // Using alert for now, replace with custom modal
-    onAddDentalRecord(newDentalRecord); // Notify parent with the new dental record data
+  // Internal handler for saving a new dental record from the overlay
+  const handleSaveNewDentalRecord = (newRecordFormData: NewDentalRecordFormData): void => {
+    console.log("New dental record data saved (from DentalRecordsTable overlay):", newRecordFormData);
+    // In a real application, you would send this newRecordFormData to your backend API.
+    // The backend would then generate the ID, createdAt, and updatedAt.
+    // For mock data, we'll simulate it here before calling the parent's onAddDentalRecord.
+
+    // Convert date string to Date object. Handle potential invalid date if string is empty/bad.
+    const recordDate = newRecordFormData.date ? new Date(newRecordFormData.date) : new Date('Invalid Date');
+
+    // Simulate ID and timestamps for mock data
+    const newRecordWithMeta: DentalRecord = {
+      id: `dr${records.length + 1}`, // Simple mock ID generation
+      patientId: 'patient-id-placeholder', // This would come from context or be selected in the form
+      date: recordDate, // Use the converted Date object
+      procedure: newRecordFormData.procedure,
+      totalCost: newRecordFormData.totalCost,
+      paymentLeft: newRecordFormData.paymentLeft,
+      status: newRecordFormData.status as DentalRecord['status'], // Cast to correct status type
+      notes: newRecordFormData.notes,
+      createdAt: new Date(), // Set to current time
+      updatedAt: new Date(), // Set to current time
+    };
+
+    onAddDentalRecord(newRecordWithMeta); // Notify parent with the complete new dental record data
+    alert('New dental record added! (Check console for data)');
     handleCloseAddDentalRecordOverlay(); // Close overlay after save
   };
 
-
   const filteredRecords = records.filter((record) => {
+    // Ensure record.date is a valid Date object before formatting
+    const isRecordDateValid = record.date instanceof Date && !isNaN(record.date.getTime());
+
     const matchesDate = filterDate
-      ? format(record.date, "yyyy-MM-dd") === filterDate
+      ? isRecordDateValid && format(record.date, "yyyy-MM-dd") === filterDate
       : true;
     const matchesStatus = filterStatus
       ? record.status.toLowerCase() === filterStatus.toLowerCase()
@@ -65,6 +91,7 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records, onAddD
     return matchesDate && matchesStatus;
   });
 
+  // Pagination logic:
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = filteredRecords.slice(
@@ -73,20 +100,27 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records, onAddD
   );
   const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
 
+  // Function to change the current page.
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+  // Helper function to safely format dates
+  const safeFormatDate = (date: Date | undefined, formatStr: string): string => {
+    return date instanceof Date && !isNaN(date.getTime()) ? format(date, formatStr) : 'N/A';
+  };
+
   return (
-    // Replaced 'dental-records-table-container' with Tailwind classes for background, padding, rounded corners, and shadow
     <div className="bg-white p-4 rounded-xl shadow-sm">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold text-gray-800">Dental Records</h3>
-        {/* Replaced 'primary-btn' with Tailwind classes */}
-        <button onClick={handleOpenAddDentalRecordOverlay} className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-1 hover:bg-blue-700 transition-colors duration-200">
+        <button
+          onClick={handleOpenAddDentalRecordOverlay} // Attach click handler
+          className="bg-indigo-600 text-white px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-1 hover:bg-indigo-700 transition-colors duration-200"
+        >
           <span className="text-xl">+</span> Add New Record
         </button>
       </div>
 
-      {/* Filters */}
+      {/* Filters for date and status */}
       <div className="flex gap-4 mb-4">
         <input
           type="date"
@@ -106,49 +140,44 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records, onAddD
         </select>
       </div>
 
-      {/* Table */}
+      {/* Table section, allowing horizontal scrolling if content overflows */}
       <div className="overflow-x-auto">
-        {/* Replaced 'dental-records-table' with Tailwind table-fixed and w-full */}
         <table className="min-w-full divide-y divide-gray-200 table-fixed w-full">
           <thead className="bg-gray-50">
             <tr>
-              {/* Table headers with Tailwind padding, alignment, font, and specific widths */}
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">Date</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[20%]">Procedure</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">Total Cost</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">Payment Left</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[10%]">Status</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[14%]">Actions</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[20%]">Notes</th>
+              {/* Table headers with adjusted Tailwind widths for 10 columns */}
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[7%]">ID</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[10%]">Date</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[18%]">Procedure</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[10%]">Total Cost</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[10%]">Payment Left</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[8%]">Status</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[10%]">Actions</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[9%]">Created At</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[9%]">Modified At</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[9%]">Notes</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {currentRecords.length > 0 ? (
               currentRecords.map((record) => (
                 <tr key={record.id}>
-                  {/* Table data cells with Tailwind padding, text size, color, and alignment */}
-                  <td className="px-4 py-3 text-sm text-gray-900 text-left">{format(record.date, "MMM dd")}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-left">{record.procedure}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-left">
+                  {/* Table data cells with Tailwind styling - Removed whitespace between <td> tags */}
+                  <td className="px-4 py-3 text-sm text-gray-900 text-left">{record.id}</td><td className="px-4 py-3 text-sm text-gray-900 text-left">{safeFormatDate(record.date, "MMM dd, yyyy")}</td><td className="px-4 py-3 text-sm text-gray-900 text-left">{record.procedure}</td><td className="px-4 py-3 text-sm text-gray-900 text-left">
                     {record.totalCost.toLocaleString("en-PH", { style: "currency", currency: "PHP" })}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-left">
+                  </td><td className="px-4 py-3 text-sm text-gray-900 text-left">
                     {record.paymentLeft.toLocaleString("en-PH", { style: "currency", currency: "PHP" })}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-left">
-                    {/* span.status relies on global status classes from index.css */}
+                  </td><td className="px-4 py-3 text-sm text-left">
                     <span className={`status ${record.status.toLowerCase().replace(" ", "-")}`}>{record.status}</span>
-                  </td>
-                  <td className="px-4 py-3 text-sm font-medium text-left">
+                  </td><td className="px-4 py-3 text-sm font-medium text-left">
                     <button className="text-blue-600 hover:text-blue-800 mr-2 transition-colors duration-150">Edit</button>
                     <button className="text-blue-600 hover:text-blue-800 transition-colors duration-150">View</button>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-500 text-left">{record.notes}</td>
+                  </td><td className="px-4 py-3 text-sm text-gray-500 text-left">{safeFormatDate(record.createdAt, "MMM dd, yyyy")}</td><td className="px-4 py-3 text-sm text-gray-500 text-left">{safeFormatDate(record.updatedAt, "MMM dd, yyyy")}</td><td className="px-4 py-3 text-sm text-gray-500 text-left">{record.notes}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={10} className="px-6 py-4 text-center text-gray-500">
                   No dental records found.
                 </td>
               </tr>
@@ -197,7 +226,7 @@ const DentalRecordsTable: React.FC<DentalRecordsTableProps> = ({ records, onAddD
           </nav>
         </div>
       )}
-      {/* Add Patient Overlay - rendered directly within PatientList */}
+      {/* Add Dental Record Overlay - rendered directly within DentalRecordsTable */}
       <AddDentalRecordOverlay
         isOpen={showAddDentalRecordOverlay}
         onClose={handleCloseAddDentalRecordOverlay}

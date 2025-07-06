@@ -5,7 +5,6 @@ export interface Patient {
   lastVisit: Date;
   status?: 'Scheduled' | 'To pay' | 'Overdue' | 'Completed';
   profileImg?: string;
-  // New fields from PatientDetail and image
   age?: number;
   gender?: string;
   phone?: string;
@@ -40,6 +39,7 @@ export interface MetricCard {
   icon?: React.ReactNode;
 }
 
+// Ensure DentalRecord is properly defined and exported here
 export interface DentalRecord {
   id: string;
   patientId: string;
@@ -47,6 +47,8 @@ export interface DentalRecord {
   procedure: string;
   totalCost: number;
   paymentLeft: number;
-  status: 'In Progress' | 'Completed' | 'Scheduled'; // Added specific statuses for dental records
+  status: 'In Progress' | 'Completed' | 'Scheduled';
   notes?: string;
+  createdAt: Date; // Added
+  updatedAt: Date; // Added
 }
