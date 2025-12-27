@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-=======
 // src/types/index.ts
->>>>>>> backup-before-force
 export interface Patient {
   id: string;
   name: string;
   lastVisit: Date;
-<<<<<<< HEAD
-  status?: 'Scheduled' | 'To pay' | 'Overdue';
-  profileImg?: string;
-=======
   status?: 'Scheduled' | 'To pay' | 'Overdue' | 'Completed';
   profileImg?: string;
-  // New fields from PatientDetail and image
   age?: number;
   gender?: string;
   phone?: string;
@@ -21,7 +13,6 @@ export interface Patient {
   address?: string;
   occupation?: string;
   medicalHistory?: string;
->>>>>>> backup-before-force
 }
 
 export interface Appointment {
@@ -46,10 +37,9 @@ export interface MetricCard {
   value: string | number;
   subtext?: string;
   icon?: React.ReactNode;
-<<<<<<< HEAD
-=======
 }
 
+// Ensure DentalRecord is properly defined and exported here
 export interface DentalRecord {
   id: string;
   patientId: string;
@@ -57,7 +47,8 @@ export interface DentalRecord {
   procedure: string;
   totalCost: number;
   paymentLeft: number;
-  status: 'In Progress' | 'Completed' | 'Scheduled'; // Added specific statuses for dental records
+  status: 'In Progress' | 'Completed' | 'Scheduled';
   notes?: string;
->>>>>>> backup-before-force
+  createdAt: Date; // Added
+  updatedAt: Date; // Added
 }

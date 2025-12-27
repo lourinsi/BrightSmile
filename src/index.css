@@ -1,0 +1,534 @@
+/* src/index.css */
+
+/* Tailwind CSS Directives - THESE MUST BE AT THE VERY TOP */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Base Reset and Typography --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif; /* Ensure 'Inter' font is available or replace with a fallback */
+  background-color: #f7f9fc;
+  color: #333;
+}
+
+/* --- Global Layout Styles --- */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ensures the container takes full viewport height */
+}
+
+.dashboard-content {
+  display: flex;
+  flex: 1; /* Allows content to take remaining space */
+}
+
+/* --- Topbar & Navigation Styles --- */
+.topbar {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eee;
+  padding: 0.5rem 0; /* Adjust padding for topbar height */
+}
+
+/* Specific styling for the Logo component wrapper in the topbar */
+/* The actual Logo component now uses Tailwind classes directly for its internal layout */
+/* .logo-wrapper { ... no specific styles needed if .logo itself has all flex/padding } */
+
+/* Generic .logo class (if used as a container for BrightSmile text/image) */
+.logo {
+  /* This class is now primarily styled with Tailwind in Logo.tsx.
+     Ensure consistency if you have other uses of .logo. */
+  font-size: 1.5rem; /* Fallback/general font-size */
+  font-weight: bold; /* Fallback/general font-weight */
+  white-space: nowrap; /* Prevent text wrap */
+  padding: 1rem 2rem 1rem 1rem; /* General padding */
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  padding-right: 2rem;
+  flex-grow: 1; /* Allows navigation to take available horizontal space */
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem; /* Space between navigation links */
+  flex-grow: 1;
+  justify-content: flex-start; /* Align nav links to the left */
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0; /* Padding for clickable area */
+  transition: color 0.2s ease-in-out; /* Smooth transition for hover/active */
+}
+
+.nav-links a.active {
+  color: #1a73e8;
+  font-weight: bold;
+  border-bottom: 2px solid #1a73e8; /* Highlight active link */
+}
+
+.profile-icon img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover; /* Ensures image fills without distortion */
+}
+
+/* --- Sidebar Styles (Patient List Container) --- */
+.sidebar {
+  width: 280px; /* Fixed width for the sidebar */
+  background-color: #fff;
+  border-right: 1px solid #eee;
+  padding: 1.2rem;
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  flex-shrink: 0; /* Prevent sidebar from shrinking when main content needs more space */
+}
+
+/* --- Main Content Area Styles --- */
+.main-content {
+  flex: 1; /* Allows main content to take remaining space */
+  padding: 1.5rem 2rem;
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+/* --- Dashboard Specific Sections (from previous context) --- */
+.welcome-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.action-buttons button {
+  margin-left: 1rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.primary-btn {
+  background-color: #1a73e8;
+  color: white;
+  transition: background-color 0.2s ease-in-out; /* Smooth transition */
+}
+
+.primary-btn:hover {
+  background-color: #1660cc;
+}
+
+.secondary-btn {
+  background-color: #e6f0ff;
+  color: #1a73e8;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.secondary-btn:hover {
+  background-color: #d1e2ff;
+  color: #135ac5;
+}
+
+
+.appointment-calendar{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* --- Patient List Styles --- */
+.patient-list-container {
+  /* No additional styling needed here, inherited from general component styling */
+}
+
+.patient-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Specific style for add patient button within patient list */
+.add-patient-btn {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-patient-btn:hover {
+  background-color: #1660cc;
+}
+
+.search-container {
+  margin-bottom: 1rem;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.patients-list .patient-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out, border-left 0.2s ease-in-out;
+}
+
+.patients-list .patient-item:last-child {
+  border-bottom: none;
+}
+
+.patient-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.patient-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.patient-info h4 {
+  font-size: 0.95rem;
+}
+
+.patient-info p {
+  font-size: 0.8rem;
+}
+
+/* --- Status Tag Styles (Global for .status-tag and .status) --- */
+/* These styles are shared between Patient List and Appointment List status indicators */
+.status-tag, .status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap; /* Prevents text from wrapping within the tag */
+  display: inline-block; /* Ensures padding and background work correctly */
+}
+
+.status-tag.scheduled, .status.scheduled {
+  background-color: #e3f2fd;
+  color: #1a73e8;
+}
+
+.status-tag.completed, .status.completed {
+  background-color: #e3f2fd;
+  color: green;
+}
+
+.status-tag.to-pay { /* Specific to Patient List status */
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-tag.overdue, .status.overdue {
+  background-color: #fdecea;
+  color: #d93025;
+}
+
+.status.confirmed { /* Specific to Appointment List status */
+  background-color: #d7fbe8;
+  color: #137333;
+}
+
+.status.in-progress { /* Specific to Appointment List and Dental Records status */
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status.completed { /* Specific to Appointment List and Dental Records status */
+  background-color: #e0f7fa;
+  color: #00796b;
+}
+
+
+/* --- Appointments List Styles --- */
+.appointments-section {
+  margin-bottom: 2rem;
+}
+
+.appointment-item {
+  display: flex;
+  justify-content: space-between; /* Spreads out items evenly */
+  align-items: center; /* Vertically aligns items in the row */
+  background-color: #fff;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.time {
+  font-weight: bold;
+  min-width: 4.5rem; /* Ensures consistent width for time slot */
+  text-align: left;
+}
+
+.appointment-details {
+  flex-grow: 1; /* Allows this section to take up available space */
+  display: flex;
+  flex-direction: column; /* Stacks h4 and p vertically */
+  align-items: flex-start; /* Aligns h4 and p to the left within this column */
+  /* No margin-left here; gap from parent or explicit margin on time/details container will handle it */
+}
+
+.appointment-details h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.1rem; /* Reduced space between name and type */
+}
+
+.appointment-details p {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 0; /* Removes default top margin for paragraph */
+}
+
+.appointment-duration {
+  font-size: 0.85rem;
+  color: #666;
+  min-width: 4.5rem; /* Consistent width for duration */
+  text-align: right;
+}
+
+.appointment-status {
+  min-width: 4rem; /* Consistent width for status tag */
+  text-align: right;
+}
+
+/* --- Calendar Styles --- */
+.calendar-widget {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.05);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-days, .calendar-cells {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day-name, .calendar-cell {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+/* --- Activity List Styles --- */
+.activity-section {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  box-shadow: 0 0 4px rgba(0,0,0,0.05);
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem; /* Increased horizontal padding */
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-details {
+  flex-grow: 1;
+  margin-left: 1rem; /* Increased space from the icon */
+  /* Removed text-align: center here as per last instruction for Activity List */
+}
+
+.activity-details h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.activity-details p {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.activity-time {
+  text-align: right;
+}
+
+.activity-time span {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* --- Patient Detail Page Specific Styles --- */
+.patient-detail-container {
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+}
+
+.patient-info-header h2 {
+  font-size: 1.75rem;
+  color: #222;
+}
+
+.patient-info-header p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.tabs {
+  margin-bottom: 1.5rem;
+}
+
+.tab-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.tab-button:first-child {
+  margin-left: 0;
+}
+
+.dental-chart-upload, .medical-receipts-upload {
+  display: flex;
+  flex-direction: column;
+}
+
+.dental-chart-upload .primary-btn, .medical-receipts-upload .primary-btn {
+  width: auto;
+  align-self: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* --- Dental Records Table Specific Styles --- */
+.dental-records-table-container {
+  /* No additional styling needed here */
+}
+
+.dental-records-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.dental-records-table th:nth-child(1), /* Date */
+.dental-records-table td:nth-child(1) {
+  width: 12%;
+}
+
+.dental-records-table th:nth-child(2), /* Procedure */
+.dental-records-table td:nth-child(2) {
+  width: 20%;
+}
+
+.dental-records-table th:nth-child(3), /* Total Cost */
+.dental-records-table td:nth-child(3) {
+  width: 12%;
+}
+
+.dental-records-table th:nth-child(4), /* Payment Left */
+.dental-records-table td:nth-child(4) {
+  width: 12%;
+}
+
+.dental-records-table th:nth-child(5), /* Status */
+.dental-records-table td:nth-child(5) {
+  width: 10%;
+}
+
+.dental-records-table th:nth-child(6), /* Actions */
+.dental-records-table td:nth-child(6) {
+  width: 14%;
+}
+
+.dental-records-table th:nth-child(7), /* Notes */
+.dental-records-table td:nth-child(7) {
+  width: 20%;
+}
+
+.dental-records-table th,
+.dental-records-table td {
+  padding: 0.9rem 1.2rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+.dental-records-table .status {
+  padding: 0.3rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: inline-block;
+  white-space: nowrap;
+}

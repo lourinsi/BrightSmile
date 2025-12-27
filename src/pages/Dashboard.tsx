@@ -14,43 +14,52 @@ const Dashboard: React.FC = () => {
   const handleAddPatient = (): void => {
     console.log("Add patient clicked");
   };
+  
 
   const handleNewAppointment = (): void => {
     console.log("New appointment clicked");
   };
 
   return (
-    <div className="dashboard-container">
-      <div className="topbar flex items-center">
-        <div className="logo-wrapper">
-          <Logo />
-        </div>
-        <div className="navigation">
+    // Replaced 'dashboard-container' with Tailwind flex utilities for full height
+    <div className="flex flex-col h-screen">
+      {/* Replaced 'topbar' with Tailwind classes for flex, alignment, background, and border */}
+      <div className="flex items-center bg-white border-b border-gray-200 py-2">
+        {/* 'logo-wrapper' is no longer needed as Logo component now contains its own styling */}
+        <Logo />
+        {/* 'navigation' can keep its custom class or be converted if its internal components are fully Tailwind */}
+        <div className="navigation flex-1 pr-8"> {/* Added flex-1 and pr-8 for alignment */}
           <Navigation />
         </div>
+
       </div>
-      <div className="dashboard-content flex">
-        {/* Sidebar */}
-        <div className="sidebar">
+      {/* Replaced 'dashboard-content' with Tailwind flex utilities */}
+      <div className="flex flex-1">
+        {/* Replaced 'sidebar' with Tailwind width, background, border, padding, and overflow classes */}
+        <div className="w-[280px] bg-white border-r border-gray-200 p-4 overflow-y-auto flex-shrink-0">
           <PatientList patients={patients} onAddPatient={handleAddPatient} />
         </div>
 
-        {/* Main Content */}
-        <div className="main-content flex-1 p-4">
-          {/* Welcome and Buttons */}
-          <div className="welcome-section flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold">Welcome back, Dr. Smith</h1>
-            <div className="action-buttons flex gap-2">
-              <button className="primary-btn">
+        {/* Replaced 'main-content' with Tailwind flex, padding, and overflow classes */}
+        <div className="flex-1 p-6 overflow-y-auto">
+          {/* Replaced 'welcome-section' with Tailwind flex utilities and margin */}
+          <div className="flex justify-between items-center mb-6">
+            {/* 'h1' already uses Tailwind classes */}
+            <h1 className="text-2xl font-bold text-gray-800">Welcome back, Dr. Smith</h1>
+            {/* 'action-buttons' already uses Tailwind flex and gap */}
+            <div className="flex gap-2">
+              {/* Converted 'primary-btn' to Tailwind classes */}
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition duration-200 ease-in-out">
                 <span>+</span> New Appointment
               </button>
-              <button className="secondary-btn">
+              {/* Converted 'secondary-btn' to Tailwind classes */}
+              <button className="bg-blue-100 text-blue-700 px-4 py-2 rounded-md font-medium hover:bg-blue-200 transition duration-200 ease-in-out">
                 <span>📅</span> View Schedule
               </button>
             </div>
           </div>
-          {/* Metrics */}
-          <div className="metrics-row grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          {/* Replaced 'metrics-row' with Tailwind grid utilities */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <MetricCard
               title="Total Patients"
               value={2834}
@@ -76,19 +85,21 @@ const Dashboard: React.FC = () => {
               icon={<span>⭐</span>}
             />
           </div>
-          <div className="appointment-calendar grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            {/* Appointments */}
-            <div className="flex-1 bg-white p-4 rounded-xl shadow h-full overflow-auto">
+          {/* Adjusted grid columns for Appointment List and Calendar */}
+          <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4 mb-8"> {/* Changed to 2fr_1fr */}
+            {/* Appointments component container */}
+            <div className="bg-white p-4 rounded-xl shadow h-full overflow-auto">
               <AppointmentList appointments={appointments} />
             </div>
 
-            {/* Calendar */}
-            <div className="w-64 bg-white p-4 rounded-xl shadow h-full">
+            {/* Calendar component container */}
+            <div className="bg-white p-4 rounded-xl shadow h-full">
               <Calendar />
             </div>
           </div>
-          {/* Recent Activity */}
-          <div className="bg-white p-4 rounded-xl shadow">
+          {/* Recent Activity container - adjusted margin-top and padding */}
+          <div className="bg-white p-2 rounded-xl shadow mt-0"> {/* Changed mt-0, p-6 */}
+
             <ActivityList activities={activities} />
           </div>
         </div>
